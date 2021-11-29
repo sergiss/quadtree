@@ -1,2 +1,2 @@
 # quadtree
-:beetle: Quadtree implrementation with Javascript
+:beetle: Quadtree implementation with Javascript
