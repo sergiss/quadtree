@@ -1,5 +1,5 @@
 # quadtree
-:beetle: Quadtree implementation with Javascript
+:tanabata_tree: Quadtree implementation with Javascript
 
 [<h2>Demo</h2>](https://sergiss.github.io/quadtree/)
 
