@@ -70,7 +70,6 @@ window.addEventListener("load", ()=> {
         b4.position.y = b4.shape.halfHeight;
     }
     
-    var t = 0;
     var lastTime = 0;
     const render = (time = 1)=> {        
         requestAnimationFrame(render);
@@ -88,9 +87,8 @@ window.addEventListener("load", ()=> {
         canvas.height = h;
 
         updateLimits(w, h);
-        t += dt;
-        if(t > 1 && world.bodies.length < 150) {
-            t = 0;
+
+        if(world.bodies.length < 150) {
             let shape;
             if(world.bodies.length % 2 == 0) {
                 shape = new Rectangle(5 + Math.random() * 10);
