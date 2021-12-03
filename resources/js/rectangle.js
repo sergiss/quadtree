@@ -2,11 +2,10 @@ import { Shape } from "./shape.js";
 
 export class Rectangle extends Shape {
 
-    constructor(halfWidth = 0.5, halfHeight = halfWidth, color = '#da532c') {
-        super();
+    constructor(halfWidth = 0.5, halfHeight = halfWidth, color) {
+        super(color);
         this.halfWidth  = halfWidth;
-        this.halfHeight = halfHeight;  
-        this.color = color;
+        this.halfHeight = halfHeight;
     }
 
     copy() {
@@ -18,14 +17,14 @@ export class Rectangle extends Shape {
     }
 
     render(ctx) {
-        ctx.strokeStyle = this.color;
+        ctx.fillStyle = this.color;
         ctx.beginPath();
         const position = this.body.position;
         ctx.rect(position.x - this.halfWidth, 
                  position.y - this.halfHeight, 
                  this.halfWidth  * 2.0, 
                  this.halfHeight * 2.0);
-        ctx.stroke();
+        ctx.fill();
     }
 
     updateBounds() {

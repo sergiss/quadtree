@@ -2,10 +2,9 @@ import { Shape } from "./shape.js";
 
 export class Circle extends Shape {
 
-    constructor(radius = 1, color = '#2d89ef') {
-        super();
+    constructor(radius = 1, color) {
+        super(color);
         this.radius = radius;
-        this.color = color;
     }
 
     copy() {
@@ -17,13 +16,13 @@ export class Circle extends Shape {
     }
 
     render(ctx) {
-        ctx.strokeStyle = this.color;
+        ctx.fillStyle = this.color;
         ctx.beginPath();
         let position = this.body.position;
         ctx.arc(position.x, 
                 position.y, 
                 this.radius, 0, 2 * Math.PI);
-        ctx.stroke();
+        ctx.fill();
     }
 
     updateBounds() {

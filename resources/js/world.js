@@ -12,7 +12,6 @@ export class World {
   }
 
   step(dt) {
-
     this.pairs = [];
     this.quadtree.clear();
 
@@ -32,12 +31,13 @@ export class World {
     }
 
     // Check collisions
+
     for (i = 0; i < this.bodies.length; ++i) {
       a = this.bodies[i];
       let result = this.quadtree.iterate(a);
       for (j = 0; j < result.length; ++j) {
         b = result[j];
-        if (b !== a && a.invMass + b.invMass !== 0) {
+        if (b !== a && b.invMass + a.invMass !== 0) {
           let pair = new Pair();
           if (pair.handleCollision(a, b)) {
             this.pairs.push(pair);
@@ -51,7 +51,6 @@ export class World {
       const pair = this.pairs[i];
       pair.solveCollision();
     }
-
   }
 
   createBody(shape, x = 0, y = 0, mass = 1) {
@@ -68,8 +67,8 @@ export class World {
   }
 
   removeAll(bodies) {
-    for(let i = 0; i < bodies.length; ++i) {
-      this.remove(bodies[i])
+    for (let i = 0; i < bodies.length; ++i) {
+      this.remove(bodies[i]);
     }
   }
 
@@ -90,16 +89,15 @@ export class World {
     for (let i = 0; i < this.bodies.length; ++i) {
       iterator(this.bodies[i]);
     }
-  }
+  };
 
   render(ctx, debug) {
-    if(debug) {
-      ctx.strokeStyle = '#fff';
+    if (debug) {
+      ctx.strokeStyle = "#fff";
       this.quadtree.debug(ctx);
     }
     for (let i = 0; i < this.bodies.length; ++i) {
       this.bodies[i].shape.render(ctx);
     }
   }
-
 }

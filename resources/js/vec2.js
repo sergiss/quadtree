@@ -154,6 +154,10 @@ export class Vec2 {
       }
       return this.x * x + this.y * y;
     }
+
+    isZero() {
+      return this.x === 0 && this.y === 0;
+    }
   
     setZero() {
       this.x = this.y = 0;

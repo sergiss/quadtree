@@ -5,7 +5,18 @@ export class Shape {
     Shape.CIRCLE = 1;
   }
 
-  constructor() { }
+  constructor(color = this.rndColor()) {
+    this.color = color;
+   }
+
+  rndColor() {
+    const hex = '0123456789ABCDEF';
+    let i, result = '#';
+    for (i = 0; i < 6; i++) {
+      result += hex[Math.floor(Math.random() * hex.length)];
+    }
+    return result;
+  }
   
   copy() {
     throw new Error("Unimplemented method!");
