@@ -44,6 +44,13 @@ export class AABB {
         return this.max.y - this.min.y;
     }
 
+    overlaps(aabb) {
+        return aabb.min.x <= this.max.x && 
+			   aabb.min.y <= this.max.y && 
+			   aabb.max.x >= this.min.x &&
+			   aabb.max.y >= this.min.y;
+    }
+
     debug(ctx) {
         ctx.beginPath();
         ctx.rect(this.min.x, 
@@ -128,13 +135,20 @@ export class Quadtree {
     }
 
     iterate(aabb, result = []) {
+
         if(this.hasChildrens()) {
             const index = this.indexOf(aabb);
             if (index > -1) {
                 this.nodes[index].iterate(aabb, result);
             }
         }
-        result.push(...this.data);
+
+        for(let i = 0; i < this.data.length; ++i) {
+            if(this.data[i].overlaps(aabb)) {
+                result.push(this.data[i]);
+            }
+        }     
+        
         return result;
     }
 
