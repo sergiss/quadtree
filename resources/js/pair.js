@@ -24,10 +24,10 @@ export class Pair {
         const { a, b } = this;
 
         // Correct velocities        
-	const diff = Pair.tmp.set(b.velocity).sub(a.velocity);
+        const diff = Pair.tmp.set(b.velocity).sub(a.velocity);
 
-	const av = diff.dot(this.normal); // accumulated velocity
-	if(av < 0) {
+        const av = diff.dot(this.normal); // accumulated velocity
+        if(av < 0) {
             const j = (1 + Math.min(a.restitution, b.restitution)) * av / (a.invMass + b.invMass);	  
             a.velocity.addScl(this.normal,  a.invMass * j);
             b.velocity.addScl(this.normal, -b.invMass * j);

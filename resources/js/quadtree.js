@@ -64,36 +64,32 @@ export class AABB {
 
 export class Quadtree {
 
-    static MAX_DEPTH = 6;
+    static MAX_DEPTH = 12;
 
     constructor(aabb, depth = 0) {
         this.aabb = aabb;
         this.depth = depth;
         this.nodes = [];
         this.data = [];
-
-        this.split();
     }
     
     split() { // create child nodes
-        if (this.depth < Quadtree.MAX_DEPTH) {
-            const d = this.depth + 1;
-            const hw = this.aabb.getWidth() * 0.5;
-            const hh = this.aabb.getHeight() * 0.5;
-            const x1 = this.aabb.min.x, y1 = this.aabb.min.y;
-            const x2 = this.aabb.max.x, y2 = this.aabb.max.y;
-            this.nodes[0] = new Quadtree(new AABB(new Vec2(x1, y1), new Vec2(x1 + hw, y1 + hh)), d); // top    - left
-            this.nodes[1] = new Quadtree(new AABB(new Vec2(x1 + hw, y1), new Vec2(x2, y1 + hh)), d); // top    - right
-            this.nodes[2] = new Quadtree(new AABB(new Vec2(x1, y1 + hh), new Vec2(x1 + hw, y2)), d); // bottom - left
-            this.nodes[3] = new Quadtree(new AABB(new Vec2(x1 + hw, y1 + hh), new Vec2(x2, y2)), d); // bottom - right
-        }
+
+        const d = this.depth + 1;
+        const hw = this.aabb.getWidth() * 0.5;
+        const hh = this.aabb.getHeight() * 0.5;
+        const x1 = this.aabb.min.x, y1 = this.aabb.min.y;
+        const x2 = this.aabb.max.x, y2 = this.aabb.max.y;
+        this.nodes[0] = new Quadtree(new AABB(new Vec2(x1, y1), new Vec2(x1 + hw, y1 + hh)), d); // top    - left
+        this.nodes[1] = new Quadtree(new AABB(new Vec2(x1 + hw, y1), new Vec2(x2, y1 + hh)), d); // top    - right
+        this.nodes[2] = new Quadtree(new AABB(new Vec2(x1, y1 + hh), new Vec2(x1 + hw, y2)), d); // bottom - left
+        this.nodes[3] = new Quadtree(new AABB(new Vec2(x1 + hw, y1 + hh), new Vec2(x2, y2)), d); // bottom - right
+    
     }
 
     clear() { // Clear all data
         this.data = [];
-        for(let i = 0; i < this.nodes.length; ++i) {
-            this.nodes[i].clear();
-        }
+        this.nodes = [];
     }
 
     indexOf(aabb) {
@@ -132,6 +128,20 @@ export class Quadtree {
             }
         }
         this.data.push(aabb);
+        if(this.data.length > 8 && this.depth < Quadtree.MAX_DEPTH) {
+            if(this.nodes.length === 0) {
+                this.split();
+            }
+            let i = 0;
+            while(i < this.data.length) {
+                const index = this.indexOf(this.data[i]);
+                if(index > -1) {
+                    this.nodes[index].insert(this.data.splice(i, 1)[0]);
+                } else {
+                    i++;
+                }
+            }
+        }
     }
 
     iterate(aabb, result = []) {
