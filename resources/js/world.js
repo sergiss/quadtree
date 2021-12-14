@@ -34,16 +34,14 @@ export class World {
 
     for (i = 0; i < this.bodies.length; ++i) {
       a = this.bodies[i];
-      let result = this.quadtree.iterate(a);
-      for (j = 0; j < result.length; ++j) {
-        b = result[j];
+      let result = this.quadtree.iterate(a, (b)=> {
         if (b !== a && b.invMass + a.invMass !== 0) {
           let pair = new Pair();
           if (pair.handleCollision(a, b)) {
             this.pairs.push(pair);
           }
         }
-      }
+      });
     }
 
     // Solve Collisions

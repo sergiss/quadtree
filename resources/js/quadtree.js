@@ -44,11 +44,9 @@ export class AABB {
         return this.max.y - this.min.y;
     }
 
-    overlaps(aabb) {
-        return aabb.min.x <= this.max.x && 
-			   aabb.min.y <= this.max.y && 
-			   aabb.max.x >= this.min.x &&
-			   aabb.max.y >= this.min.y;
+    intersects(aabb) {
+        return !(aabb.max.x < this.min.x || aabb.min.x > this.max.x ||
+                 aabb.max.y < this.min.y || aabb.min.y > this.max.y);
     }
 
     debug(ctx) {
@@ -99,17 +97,17 @@ export class Quadtree {
         let cx = this.aabb.min.x + hw;
         let cy = this.aabb.min.y + hh;
 
-        if (aabb.max.y < cy) { // top
-            if (aabb.max.x < cx) { // left
-                return 0;
-            } else if (aabb.min.x > cx) { // right
-                return 1;
+        if (aabb.max.y < cy && aabb.min.y > this.aabb.min.y) { // top
+            if (aabb.max.x < cx && aabb.min.x > this.aabb.min.x) { // left
+                return 0; // 0 0
+            } else if (aabb.min.x > cx && aabb.max.x < this.aabb.max.x) { // right
+                return 1; // 0 1
             }
-        } else if (aabb.min.y > cy) { // bottom
-            if (aabb.max.x < cx) { // left
-                return 2;
-            } else if (aabb.min.x > cx) { // right
-                return 3;
+        } else if (aabb.min.y > cy && aabb.max.y < this.aabb.max.y) { // bottom
+            if (aabb.max.x < cx && aabb.min.x > this.aabb.min.x) { // left
+                return 2; // 1 0
+            } else if (aabb.min.x > cx && aabb.max.x < this.aabb.max.x) { // right
+                return 3; // 1 1
             }
         }
         return -1;
@@ -144,22 +142,20 @@ export class Quadtree {
         }
     }
 
-    iterate(aabb, result = []) {
-
-        if(this.hasChildrens()) {
-            const index = this.indexOf(aabb);
-            if (index > -1) {
-                this.nodes[index].iterate(aabb, result);
-            }
-        }
+    iterate(aabb, iterator) {
 
         for(let i = 0; i < this.data.length; ++i) {
-            if(this.data[i].overlaps(aabb)) {
-                result.push(this.data[i]);
+            if(this.data[i].intersects(aabb)) {
+                iterator(this.data[i]);
             }
-        }     
+        } 
+
+        for(let i = 0; i < this.nodes.length; ++i) {
+            if(this.nodes[i].aabb.intersects(aabb)) {
+                this.nodes[i].iterate(aabb, iterator);
+            }
+        }    
         
-        return result;
     }
 
     debug(ctx) {
