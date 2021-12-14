@@ -88,12 +88,12 @@ window.addEventListener("load", ()=> {
 
         updateLimits(w, h);
 
-        if(world.bodies.length < 150) {
+        if(world.bodies.length < 1000) {
             let shape;
             if(world.bodies.length % 2 == 0) {
-                shape = new Rectangle(5 + Math.random() * 10);
+                shape = new Rectangle(2 + Math.random() * 10);
             } else {
-                shape = new Circle(5 + Math.random() * 10);
+                shape = new Circle(2 + Math.random() * 10);
             }
             const x = w * 0.5;
             const y = h * 0.5;
