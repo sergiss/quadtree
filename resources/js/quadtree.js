@@ -62,7 +62,8 @@ export class AABB {
 
 export class Quadtree {
 
-    static MAX_DEPTH = 12;
+    static MAX_DEPTH = 16;
+    static MAX_OBJECTS = 8;
 
     constructor(aabb, depth = 0) {
         this.aabb = aabb;
@@ -118,27 +119,32 @@ export class Quadtree {
     }
 
     insert(aabb) {
-        if(this.hasChildrens()) {
-            const index = this.indexOf(aabb);
-            if (index > -1) {
-                this.nodes[index].insert(aabb);
-                return;
-            }
-        }
-        this.data.push(aabb);
-        if(this.data.length > 8 && this.depth < Quadtree.MAX_DEPTH) {
+        if(this.data.length > Quadtree.MAX_OBJECTS && this.depth < Quadtree.MAX_DEPTH) {
+            let index;
             if(this.nodes.length === 0) {
                 this.split();
+
+                for(let i = 0; i < this.data.length;) {
+                    index = this.indexOf(this.data[i]);
+                    if(index > -1) {
+                        this.nodes[index].insert(this.data[i]);
+                        this.data.splice(i, 1);                    
+                    } else {
+                        i++;
+                    }                   
+                }  
+                
             }
-            let i = 0;
-            while(i < this.data.length) {
-                const index = this.indexOf(this.data[i]);
-                if(index > -1) {
-                    this.nodes[index].insert(this.data.splice(i, 1)[0]);
-                } else {
-                    i++;
-                }
+                        
+            index = this.indexOf(aabb);
+            if(index > -1) {
+                this.nodes[index].insert(aabb);                
+            } else {                
+                this.data.push(aabb);
             }
+            
+        } else {
+            this.data.push(aabb);
         }
     }
 
