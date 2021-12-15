@@ -15,7 +15,7 @@ export class World {
     this.pairs = [];
     this.quadtree.clear();
 
-    let a, b, i, j;
+    let a, i, j;
     // Update
     for (i = 0; i < this.bodies.length; ++i) {
       a = this.bodies[i];
