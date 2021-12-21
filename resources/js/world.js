@@ -4,6 +4,7 @@ import { AABB, Quadtree } from "./quadtree.js";
 import { Vec2 } from "./vec2.js";
 
 export class World {
+
   constructor(gravity = new Vec2(0, 0)) {
     this.gravity = gravity;
 
@@ -15,7 +16,7 @@ export class World {
     this.pairs = [];
     this.quadtree.clear();
 
-    let a, i, j;
+    let a, i;
     // Update
     for (i = 0; i < this.bodies.length; ++i) {
       a = this.bodies[i];
@@ -31,7 +32,6 @@ export class World {
     }
 
     // Check collisions
-
     for (i = 0; i < this.bodies.length; ++i) {
       a = this.bodies[i];
       this.quadtree.iterate(a, (b)=> {
@@ -87,7 +87,7 @@ export class World {
     for (let i = 0; i < this.bodies.length; ++i) {
       iterator(this.bodies[i]);
     }
-  };
+  }
 
   render(ctx, debug) {
     if (debug) {
@@ -98,4 +98,5 @@ export class World {
       this.bodies[i].shape.render(ctx);
     }
   }
+
 }
