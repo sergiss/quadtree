@@ -35,7 +35,7 @@ export class World {
     for (i = 0; i < this.bodies.length; ++i) {
       a = this.bodies[i];
       this.quadtree.iterate(a, (b)=> {
-        if (b !== a && b.invMass + a.invMass !== 0) {
+        if (a !== b && (b.invMass !== 0 || a.invMass !== 0)) {
           let pair = new Pair();
           if (pair.handleCollision(a, b)) {
             this.pairs.push(pair);
