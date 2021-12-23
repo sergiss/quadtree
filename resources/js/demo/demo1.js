@@ -29,6 +29,7 @@
  */
 import { Circle } from "../circle.js";
 import { Rectangle } from "../rectangle.js";
+import Time from "../time.js";
 import { Vec2 } from "../vec2.js";
 import { World } from "../world.js";
 
@@ -36,6 +37,8 @@ window.addEventListener("load", ()=> {
     
     const canvas = document.querySelector("canvas");
     const ctx = canvas.getContext("2d");
+
+    const time = new Time();
 
     const world = new World(new Vec2(0, 0));
 
@@ -68,14 +71,16 @@ window.addEventListener("load", ()=> {
         b4.shape.halfWidth = 10;
         b4.position.x = w;
         b4.position.y = b4.shape.halfHeight;
+
+        // Update quadtree dimensions
+        world.quadtree.aabb.min.set(0, 0);
+        world.quadtree.aabb.max.set(w, h);
     }
-    
-    var lastTime = 0;
-    const render = (time = 1)=> {        
+
+    const render = ()=> {        
         requestAnimationFrame(render);
 
-        let dt = 1.0 / (time - lastTime); // delta time
-        lastTime = time;
+        let dt = time.getDeltaTime();
 
         let rect = canvas.getBoundingClientRect();
 
